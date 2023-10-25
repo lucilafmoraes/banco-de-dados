@@ -1,0 +1,85 @@
+CREATE DATABASE empresadalu;
+USE db_empresadalu;
+
+CREATE TABLE cargo(
+    codCargo int primary key,
+    nome varchar(80)
+    );
+    
+CREATE TABLE departamento(
+    codDep int PRIMARY KEY,
+    nome varchar(80)
+    );
+    
+CREATE TABLE funcionario(
+    codFun int PRIMARY KEY,
+    nome varchar (80),
+    data_contratacao date,
+    salario float,
+    cod_cargo int,
+    departamento_alocado int,
+    FOREIGN KEY funcionario(cod_cargo) REFERENCES cargo(codCargo),
+    FOREIGN KEY (departamento_alocado) REFERENCES departamento(codDep)
+    );
+
+ALTER TABLE departamento
+    add funcionario_gerente int,
+    add FOREIGN KEY(funcionario_gerente) REFERENCES funcionario(codFun);
+
+INSERT INTO cargo(codCargo, nome)
+values(1, "ANALISTA");
+
+INSERT INTO departamento(codDep, nome)
+VALUES(10, "VENDAS");
+
+INSERT INTO funcionario(codFun, nome, data_contratacao, salario, cod_cargo, departamento_alocado)
+VALUES(101, "JOAO", "2010-05-10", "3200.00", 1, 10);
+
+SELECT * FROM cargo, departamento, funcionario;
+
+SELECT nome, data_contratacao, salario from funcionario;
+
+SELECT salario from funcionario
+WHERE salario BETWEEN 3000 and 4000;
+
+SELECT nome, data_contratacao, salario, cod_cargo, departamento_alocado
+FROM funcionario
+WHERE data_contratacao BETWEEN "2011-01-01" and "2011-12-31";
+
+SELECT funcionario.nome, funcionario.data_contratacao, funcionario.salario, cargo.nome
+FROM funcionario, cargo
+ORDER BY cargo.nome;
+
+SELECT nome, salario, departamento_alocado
+FROM funcionario
+ORDER BY departamento_alocado, nome;
+
+SELECT departamento.nome, funcionario.nome, funcionario.salario
+FROM departamento, funcionario
+ORDER BY departamento.nome; 
+
+INSERT INTO departamento(codDep, nome)
+VALUES(13, "PROGRAMADOR");
+
+INSERT INTO departamento(codDep, nome)
+VALUES(14, "DESIGN");
+
+INSERT INTO funcionario(CodFun, nome, data_contratacao, salario)
+VALUES(110, "JARDEL", "2015-07-31", "15000");
+
+DELETE FROM funcionario
+WHERE codFun = 109;
+
+DELETE FROM departamento
+WHERE codDep = 12;
+
+DELETE FROM funcionario
+WHERE departamento_alocado = 12;
+
+ALTER TABLE funcionario
+ADD genero char(1);
+
+DELETE FROM funcionario
+WHERE data_contratacao;
+
+CREATE INDEX indexnomefun ON funcionario(nome ASC);
